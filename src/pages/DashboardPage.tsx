@@ -265,7 +265,7 @@ export function DashboardPage() {
                         ))}
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <td className="px-7 py-6 whitespace-nowrap text-right text-sm font-medium flex items-end justify-end">
                       <Link
                         to={`/projects/${project.id}/edit`}
                         className="text-indigo-600 hover:text-indigo-900 mr-4"
