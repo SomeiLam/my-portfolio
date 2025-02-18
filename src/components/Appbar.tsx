@@ -21,7 +21,7 @@ const Appbar = ({ user }: { user: User | null }) => {
       {user ? (
         <div className="flex items-center gap-5">
           <NavLink
-            to="/dashboard"
+            to="/my-portfolio/dashboard"
             className={({ isActive }) =>
               `text-sm font-medium ${activeLinkClass(isActive)}`
             }
@@ -39,7 +39,7 @@ const Appbar = ({ user }: { user: User | null }) => {
       ) : (
         location.pathname !== '/login' && (
           <NavLink
-            to="/login"
+            to="/my-portfolio/login"
             className="inline-flex items-center text-sm font-medium text-gray-700 hover:text-indigo-600"
           >
             <LogIn className="w-4 h-4 mr-2" />

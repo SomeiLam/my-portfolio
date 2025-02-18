@@ -385,7 +385,7 @@ export function ProjectFormPage() {
           <div className="flex justify-end gap-4">
             <button
               type="button"
-              onClick={() => navigate('/dashboard')}
+              onClick={() => navigate('/my-portfolio/dashboard')}
               className="px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
             >
               Cancel

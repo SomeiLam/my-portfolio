@@ -18,7 +18,10 @@ function App() {
         <header className="bg-white shadow-sm">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
             <div className="flex items-center justify-between">
-              <Link to="/" className="flex flex-row items-center gap-3 w-full">
+              <Link
+                to="/my-portfolio"
+                className="flex flex-row items-center gap-3 w-full"
+              >
                 <Code2 className="w-8 h-8 text-indigo-600" />
                 <h1 className="text-3xl font-bold text-gray-900">
                   My Portfolio
@@ -30,11 +33,14 @@ function App() {
         </header>
 
         <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/projects/:id" element={<ProjectDetailsPage />} />
+          <Route path="/my-portfolio" element={<HomePage />} />
+          <Route path="/my-portfolio/login" element={<LoginPage />} />
           <Route
-            path="/dashboard"
+            path="/my-portfolio/projects/:id"
+            element={<ProjectDetailsPage />}
+          />
+          <Route
+            path="/my-portfolio/dashboard"
             element={
               <ProtectedRoute>
                 <DashboardPage />
@@ -42,7 +48,7 @@ function App() {
             }
           />
           <Route
-            path="/projects/new"
+            path="/my-portfolio/projects/new"
             element={
               <ProtectedRoute>
                 <ProjectFormPage />
@@ -50,7 +56,7 @@ function App() {
             }
           />
           <Route
-            path="/projects/:id/edit"
+            path="/my-portfolio/projects/:id/edit"
             element={
               <ProtectedRoute>
                 <ProjectFormPage />

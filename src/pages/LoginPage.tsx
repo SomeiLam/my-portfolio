@@ -22,7 +22,7 @@ export function LoginPage() {
       });
 
       if (error) throw error;
-      navigate('/dashboard');
+      navigate('/my-portfolio/dashboard');
     } catch (err) {
       setError(
         err instanceof Error ? err.message : 'An unknown error occurred',

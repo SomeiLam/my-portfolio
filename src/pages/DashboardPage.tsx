@@ -205,7 +205,7 @@ export function DashboardPage() {
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-bold text-gray-900">Manage Projects</h2>
             <Link
-              to="/projects/new"
+              to="/my-portfolio/projects/new"
               className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700"
             >
               <Plus className="w-4 h-4 mr-2" />
@@ -267,7 +267,7 @@ export function DashboardPage() {
                     </td>
                     <td className="px-7 py-6 whitespace-nowrap text-right text-sm font-medium flex items-end justify-end">
                       <Link
-                        to={`/projects/${project.id}/edit`}
+                        to={`/my-portfolio/projects/${project.id}/edit`}
                         className="text-indigo-600 hover:text-indigo-900 mr-4"
                       >
                         <Edit className="w-4 h-4" />

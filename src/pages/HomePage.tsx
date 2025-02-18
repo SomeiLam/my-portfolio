@@ -87,7 +87,7 @@ export function HomePage() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredProjects.map((project) => (
-          <Link key={project.id} to={`/projects/${project.id}`}>
+          <Link key={project.id} to={`/my-portfolio/projects/${project.id}`}>
             <ProjectCard project={project} />
           </Link>
         ))}
