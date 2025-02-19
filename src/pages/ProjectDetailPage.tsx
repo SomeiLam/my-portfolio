@@ -3,11 +3,14 @@ import { useParams, Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { Project } from '../types';
 import { ArrowLeft, ExternalLink, Github } from 'lucide-react';
+import { convertFromRaw } from 'draft-js';
+import { stateToHTML } from 'draft-js-export-html';
 
-export function ProjectDetailsPage() {
+export function ProjectDetailPage() {
   const { id } = useParams();
   const [project, setProject] = useState<Project | null>(null);
   const [loading, setLoading] = useState(true);
+  const [detailsHtml, setDetailsHtml] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchProject() {
@@ -20,6 +23,23 @@ export function ProjectDetailsPage() {
 
         if (error) throw error;
         setProject(data);
+
+        // Convert Draft.js JSON to HTML
+        if (data.detailsjson) {
+          try {
+            const rawContent =
+              typeof data.detailsjson === 'string'
+                ? JSON.parse(data.detailsjson)
+                : data.detailsjson;
+
+            const contentState = convertFromRaw(rawContent);
+            const html = stateToHTML(contentState);
+            setDetailsHtml(html);
+          } catch (error) {
+            console.error('Error parsing rich text:', error);
+            setDetailsHtml('<p>Error displaying details.</p>');
+          }
+        }
       } catch (error) {
         console.error('Error fetching project:', error);
       } finally {
@@ -58,11 +78,19 @@ export function ProjectDetailsPage() {
         </Link>
 
         <div className="bg-white rounded-lg shadow-md overflow-hidden">
-          <img
-            src={project.image_url}
-            alt={project.title}
-            className="w-full h-64 object-cover"
-          />
+          <div className="flex flex-col justify-center items-center sm:flex-row">
+            {project.image_url.map((image, index) => (
+              <div className="mt-2 mx-3 border" key={index}>
+                <img
+                  src={image}
+                  alt={`${project.title}-${index}`}
+                  className="h-full w-full sm:w-full sm:h-64 object-cover cursor-pointer"
+                  onClick={() => window.open(image, '_blank')}
+                />
+              </div>
+            ))}
+          </div>
+
           <div className="p-8">
             <div className="flex justify-between items-start mb-4">
               <h1 className="text-3xl font-bold text-gray-900">
@@ -87,12 +115,16 @@ export function ProjectDetailsPage() {
               </div>
             </div>
 
-            <div className="mb-8">
-              <h2 className="text-xl font-semibold mb-4">Project Details</h2>
-              <div className="prose max-w-none text-gray-600">
-                {project.details}
+            {/* Render Rich Text from Draft.js */}
+            {detailsHtml && (
+              <div className="mb-8">
+                <h2 className="text-xl font-semibold mb-4">Project Details</h2>
+                <div
+                  className="prose prose-lg max-w-none text-gray-600"
+                  dangerouslySetInnerHTML={{ __html: detailsHtml }}
+                />
               </div>
-            </div>
+            )}
 
             <div className="flex gap-4">
               {project.demo_url && (

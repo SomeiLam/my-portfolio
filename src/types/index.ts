@@ -1,13 +1,16 @@
+import { RawDraftContentState } from 'draft-js';
+
 export interface Project {
   id: string;
   title: string;
   description: string;
-  image_url: string;
+  image_url: string[];
+  thumbnail_url: string;
   technologies: Technology[];
   demo_url?: string;
   github_url?: string;
   year: number;
-  details?: string;
+  detailsjson?: RawDraftContentState;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -27,3 +30,18 @@ export const technologies: Technology[] = [
   { name: 'Firebase', category: 'backend' },
   { name: 'MongoDB', category: 'database' },
 ];
+
+export type ContentBlock = {
+  type: 'text' | 'image' | 'code';
+  content: string;
+  language?: string; // For code blocks
+  alt?: string; // For images
+};
+
+export type Note = {
+  id: string;
+  title: string;
+  date: string;
+  category: string;
+  details: ContentBlock[];
+};

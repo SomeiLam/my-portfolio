@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://someilam.github.io/",
+  "homepage": "https://someilam.github.io/my-portfolio",
   "scripts": {
     "dev": "vite",
     "predeploy": "npm run build",
@@ -14,16 +14,22 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.48.1",
+    "@tailwindcss/typography": "^0.5.16",
+    "draft-js": "^0.11.7",
+    "draft-js-export-html": "^1.4.1",
     "lucide-react": "^0.475.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.1.5",
-    "react-scripts": "^5.0.1"
+    "react-scripts": "^5.0.1",
+    "react-syntax-highlighter": "^15.6.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.19.0",
+    "@types/draft-js": "^0.11.18",
     "@types/react": "^19.0.8",
     "@types/react-dom": "^19.0.3",
+    "@types/react-syntax-highlighter": "^15.5.13",
     "@vitejs/plugin-react-swc": "^3.5.0",
     "autoprefixer": "^10.4.20",
     "eslint": "^9.19.0",

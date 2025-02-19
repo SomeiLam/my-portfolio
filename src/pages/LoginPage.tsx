@@ -22,7 +22,7 @@ export function LoginPage() {
       });
 
       if (error) throw error;
-      navigate('/my-portfolio/dashboard');
+      navigate('/my-portfolio/manage-projects');
     } catch (err) {
       setError(
         err instanceof Error ? err.message : 'An unknown error occurred',
@@ -32,6 +32,8 @@ export function LoginPage() {
     }
   };
 
+  const handleLoginDemo = () => {};
+
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
@@ -40,7 +42,7 @@ export function LoginPage() {
             <Lock className="h-6 w-6 text-indigo-600" />
           </div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Sign in to your account
+            Log in as Admin
           </h2>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
@@ -87,8 +89,14 @@ export function LoginPage() {
               disabled={loading}
               className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
             >
-              {loading ? 'Signing in...' : 'Sign in'}
+              {loading ? 'Logging in...' : 'Login'}
             </button>
+          </div>
+          <div
+            className="flex justify-center items-center cursor-pointer hover:underline"
+            onClick={handleLoginDemo}
+          >
+            <p>Demo User</p>
           </div>
         </form>
       </div>

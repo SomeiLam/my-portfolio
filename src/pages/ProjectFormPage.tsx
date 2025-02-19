@@ -3,7 +3,10 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { Project, Technology } from '../types';
 import { useAuth } from '../hooks/useAuth';
-import { Upload, X } from 'lucide-react';
+import { Upload, X, Image } from 'lucide-react';
+import { convertFromRaw, convertToRaw, EditorState } from 'draft-js';
+import 'draft-js/dist/Draft.css';
+import RichTextEditor from '../components/RichTextEditor';
 
 export function ProjectFormPage() {
   const { id } = useParams();
@@ -11,9 +14,9 @@ export function ProjectFormPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [technologies, setTechnologies] = useState<Technology[]>([]);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const [isDragging, setIsDragging] = useState(false);
+  const [editorState, setEditorState] = useState(EditorState.createEmpty());
 
+  const [isDragging, setIsDragging] = useState(false);
   const { user } = useAuth();
 
   async function fetchTechnologies() {
@@ -40,8 +43,10 @@ export function ProjectFormPage() {
 
       if (error) throw error;
       setFormData(data);
-      if (data.image_url) {
-        setImagePreview(data.image_url);
+      // Convert JSONB data back to Draft.js EditorState
+      if (data.detailsjson) {
+        const contentState = convertFromRaw(data.detailsjson);
+        setEditorState(EditorState.createWithContent(contentState));
       }
     } catch (error) {
       console.error('Error fetching project:', error);
@@ -52,18 +57,20 @@ export function ProjectFormPage() {
   const [formData, setFormData] = useState<Partial<Project>>({
     title: '',
     description: '',
-    image_url: '',
+    image_url: [],
+    thumbnail_url: '',
     demo_url: '',
     github_url: '',
     year: new Date().getFullYear(),
     technologies: [],
-    details: '',
   });
 
   const uploadImage = async (file: File) => {
-    const fileName = `${user?.id}-${file.name}`; // You can use any naming convention
-    const bucket = 'images'; // Name of the bucket
-    const filePath = `profile-images/${fileName}`; // Folder and file name structure
+    const fileExt = file.name.split('.').pop(); // Get file extension
+    const timestamp = Date.now(); // Get the current timestamp
+    const fileName = `${user?.id}-${timestamp}.${fileExt}`; // Generate a unique name using timestamp
+    const bucket = 'images'; // Supabase bucket name
+    const filePath = `project-images/${fileName}`; // Unique file path
 
     // Upload the image to the bucket
     const { data, error } = await supabase.storage
@@ -105,8 +112,11 @@ export function ProjectFormPage() {
     setLoading(true);
     setError('');
 
+    const rawContentState = convertToRaw(editorState.getCurrentContent());
+
     const formattedFormData = {
       ...formData,
+      detailsjson: rawContentState,
       user_id: user?.id,
     };
     try {
@@ -123,7 +133,7 @@ export function ProjectFormPage() {
         if (error) throw error;
       }
 
-      navigate('/dashboard');
+      navigate('/my-portfolio');
     } catch (err) {
       setError(
         err instanceof Error ? err.message : 'An unknown error occurred',
@@ -162,42 +172,58 @@ export function ProjectFormPage() {
   const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault();
     setIsDragging(false);
-    const file = e.dataTransfer.files[0];
-    if (file && file.type.startsWith('image/')) {
-      handleImageUpload(file);
+
+    // Convert FileList to an array and filter only images
+    const files = Array.from(e.dataTransfer.files).filter((file) =>
+      file.type.startsWith('image/'),
+    );
+
+    if (files.length > 0) {
+      handleImageUpload(files);
     }
   }, []);
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      handleImageUpload(file);
+    if (e.target.files) {
+      handleImageUpload(Array.from(e.target.files));
     }
   };
 
-  const handleImageUpload = async (file: File) => {
+  const handleImageUpload = async (files: File[]) => {
     try {
       setLoading(true);
-      // Assuming you have an uploadImage function that handles the upload to Supabase storage
-      const imageUrl = await uploadImage(file);
-      setFormData({ ...formData, image_url: imageUrl });
-      setImagePreview(URL.createObjectURL(file));
+      const uploadedImages: string[] = [];
+
+      for (const file of files) {
+        const imageUrl = await uploadImage(file);
+        if (imageUrl) {
+          uploadedImages.push(imageUrl);
+        }
+      }
+
+      // Update formData with new images
+      setFormData((prev) => ({
+        ...prev,
+        image_url: [...(prev.image_url || []), ...uploadedImages],
+      }));
     } catch (error) {
-      setError('Failed to upload image');
+      setError('Failed to upload images');
       console.error('Upload error:', error);
     } finally {
       setLoading(false);
     }
   };
 
-  const removeImage = () => {
-    setFormData({ ...formData, image_url: '' });
-    setImagePreview(null);
+  const removeImage = (index: number) => {
+    setFormData((prev) => ({
+      ...prev,
+      image_url: prev.image_url?.filter((_, i) => i !== index) || [],
+    }));
   };
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <h1 className="text-2xl font-bold text-gray-900 mb-8">
           {id ? 'Edit Project' : 'Add New Project'}
         </h1>
@@ -221,10 +247,44 @@ export function ProjectFormPage() {
             />
           </div>
 
-          <div>
+          <div className="flex flex-col gap-4">
             <label className="block text-sm font-medium text-gray-700">
               Project Image
             </label>
+            <div className="flex flex-row gap-4 flex-wrap justify-start">
+              {formData.image_url?.map((url, index) => (
+                <div key={index} className="relative">
+                  <img
+                    src={url}
+                    alt={`Preview ${index + 1}`}
+                    className="h-20 w-20 object-cover rounded-md"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => removeImage(index)}
+                    className="absolute -top-2 -right-2 p-1 bg-red-100 rounded-full text-red-600 hover:bg-red-200"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                  {formData.thumbnail_url === url ? (
+                    <span className="flex flex-row gap-1 text-xs items-center mt-2 text-indigo-500">
+                      <Image size="18px" color="#4f46e5" />
+                      Thumbnail
+                    </span>
+                  ) : (
+                    <span
+                      className="text-xs hover:underline cursor-pointer flex mt-[9px]"
+                      onClick={() =>
+                        setFormData({ ...formData, thumbnail_url: url })
+                      }
+                    >
+                      Set thumbnail
+                    </span>
+                  )}
+                </div>
+              ))}
+            </div>
+
             <div
               className={`mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-dashed rounded-lg ${
                 isDragging
@@ -235,48 +295,32 @@ export function ProjectFormPage() {
               onDragLeave={handleDragLeave}
               onDrop={handleDrop}
             >
-              {imagePreview ? (
-                <div className="relative">
-                  <img
-                    src={imagePreview}
-                    alt="Preview"
-                    className="max-h-64 rounded-lg"
-                  />
-                  <button
-                    type="button"
-                    onClick={removeImage}
-                    className="absolute -top-2 -right-2 p-1 bg-red-100 rounded-full text-red-600 hover:bg-red-200"
-                  >
-                    <X className="w-4 h-4" />
-                  </button>
-                </div>
-              ) : (
-                <div className="space-y-1 text-center">
-                  <div className="flex flex-col items-center">
-                    <Upload className="mx-auto h-12 w-12 text-gray-400" />
-                    <div className="flex text-sm text-gray-600">
-                      <label
-                        htmlFor="file-upload"
-                        className="relative cursor-pointer rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none"
-                      >
-                        <span>Upload a file</span>
-                        <input
-                          id="file-upload"
-                          name="file-upload"
-                          type="file"
-                          className="sr-only"
-                          accept="image/*"
-                          onChange={handleFileSelect}
-                        />
-                      </label>
-                      <p className="pl-1">or drag and drop</p>
-                    </div>
-                    <p className="text-xs text-gray-500">
-                      PNG, JPG, GIF up to 10MB
-                    </p>
+              <div className="space-y-1 text-center">
+                <div className="flex flex-col items-center">
+                  <Upload className="mx-auto h-12 w-12 text-gray-400" />
+                  <div className="flex text-sm text-gray-600">
+                    <label
+                      htmlFor="file-upload"
+                      className="relative cursor-pointer rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none"
+                    >
+                      <span>Upload an image</span>
+                      <input
+                        id="file-upload"
+                        name="file-upload"
+                        type="file"
+                        multiple
+                        className="sr-only"
+                        accept="image/*"
+                        onChange={handleFileSelect}
+                      />
+                    </label>
+                    <p className="pl-1">or drag and drop</p>
                   </div>
+                  <p className="text-xs text-gray-500">
+                    PNG, JPG, GIF up to 10MB
+                  </p>
                 </div>
-              )}
+              </div>
             </div>
           </div>
 
@@ -364,19 +408,13 @@ export function ProjectFormPage() {
               })}
             </div>
           </div>
-
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Details
+              Project details
             </label>
-            <textarea
-              required
-              value={formData.details}
-              onChange={(e) =>
-                setFormData({ ...formData, details: e.target.value })
-              }
-              rows={6}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+            <RichTextEditor
+              editorState={editorState}
+              setEditorState={setEditorState}
             />
           </div>
 
@@ -385,7 +423,7 @@ export function ProjectFormPage() {
           <div className="flex justify-end gap-4">
             <button
               type="button"
-              onClick={() => navigate('/my-portfolio/dashboard')}
+              onClick={() => navigate('/my-portfolio/manage-projects')}
               className="px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
             >
               Cancel

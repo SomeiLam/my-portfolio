@@ -1,46 +1,52 @@
-import { Technology } from '../types';
 import { X } from 'lucide-react';
 
+interface FilterItem {
+  id?: string;
+  name: string;
+  category: string;
+}
+
 interface TechnologyFilterProps {
-  technologies: Technology[];
-  selectedTechnologies: Technology[];
-  onSelectTechnology: (tech: Technology) => void;
-  onRemoveTechnology: (tech: Technology) => void;
+  items: FilterItem[];
+  selectedItems: FilterItem[];
+  onSelectItem: (item: FilterItem) => void;
+  onRemoveItem: (item: FilterItem) => void;
+  title: string;
 }
 
 export function TechnologyFilter({
-  technologies,
-  selectedTechnologies,
-  onSelectTechnology,
-  onRemoveTechnology,
+  items,
+  selectedItems,
+  onSelectItem,
+  onRemoveItem,
+  title,
 }: TechnologyFilterProps) {
-  // Group technologies by category
-  const groupedTechnologies = technologies.reduce(
-    (acc, tech) => {
-      // Create a category group if it doesn't exist
-      if (!acc[tech.category]) {
-        acc[tech.category] = [];
+  // Group items by category (works for both technologies & note categories)
+  const groupedItems = items.reduce(
+    (acc, item) => {
+      if (!acc[item.category]) {
+        acc[item.category] = [];
       }
-      acc[tech.category].push(tech);
+      acc[item.category].push(item);
       return acc;
     },
-    {} as Record<string, Technology[]>,
+    {} as Record<string, FilterItem[]>,
   );
 
   return (
     <div className="mb-8">
-      <h2 className="text-xl font-semibold mb-4">Filter by Technology</h2>
+      <h2 className="text-xl font-semibold mb-4">{title}</h2>
 
-      {/* Display selected technologies */}
+      {/* Display selected items */}
       <div className="flex flex-wrap gap-2 mb-4">
-        {selectedTechnologies.map((tech) => (
+        {selectedItems.map((item) => (
           <span
-            key={tech.name}
+            key={item.name}
             className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-indigo-100 text-indigo-800"
           >
-            {tech.name}
+            {item.name}
             <button
-              onClick={() => onRemoveTechnology(tech)}
+              onClick={() => onRemoveItem(item)}
               className="ml-2 hover:text-indigo-600"
             >
               <X size={14} />
@@ -49,18 +55,18 @@ export function TechnologyFilter({
         ))}
       </div>
 
-      {/* Display technologies by category */}
-      {Object.keys(groupedTechnologies).map((category) => (
+      {/* Display items by category */}
+      {Object.keys(groupedItems).map((category) => (
         <div key={category} className="mb-4 flex flex-row gap-3 items-center">
           <h3 className="font-semibold text-gray-900">{category}</h3>
           <div className="flex flex-wrap gap-2 items-center">
-            {groupedTechnologies[category].map((tech) => (
+            {groupedItems[category].map((item) => (
               <button
-                key={tech.name}
-                onClick={() => onSelectTechnology(tech)}
+                key={item.name}
+                onClick={() => onSelectItem(item)}
                 className="px-3 py-1 rounded-full text-sm border border-gray-300 hover:border-indigo-500 hover:text-indigo-500 transition-colors"
               >
-                {tech.name}
+                {item.name}
               </button>
             ))}
           </div>

@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
-import { Project, Technology } from '../types';
+import { Note, Project, Technology } from '../types';
 import { Edit, Trash2, Plus, Check, X } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
+import { formatDate } from '../utils/helper';
 
-export function DashboardPage() {
+export function ManageProjectPage() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [technologies, setTechnologies] = useState<Technology[]>([]);
+  const [notes, setNotes] = useState<Note[]>([]);
   const [loading, setLoading] = useState(true);
   const [newTechnology, setNewTechnology] = useState<Partial<Technology>>({
     name: '',
@@ -20,6 +22,7 @@ export function DashboardPage() {
   useEffect(() => {
     fetchProjects();
     fetchTechnologies();
+    fetchNotes();
   }, []);
 
   async function fetchProjects() {
@@ -49,6 +52,20 @@ export function DashboardPage() {
       setTechnologies(data || []);
     } catch (error) {
       console.error('Error fetching technologies:', error);
+    }
+  }
+
+  async function fetchNotes() {
+    try {
+      const { data, error } = await supabase
+        .from('notes')
+        .select('*')
+        .order('date', { ascending: false });
+
+      if (error) throw error;
+      setNotes(data);
+    } catch (error) {
+      console.error('Error fetching notes:', error);
     }
   }
 
@@ -238,7 +255,7 @@ export function DashboardPage() {
                       <div className="flex items-center">
                         <img
                           className="h-10 w-10 rounded-lg object-cover"
-                          src={project.image_url}
+                          src={project.thumbnail_url}
                           alt=""
                         />
                         <div className="ml-4">
@@ -402,6 +419,70 @@ export function DashboardPage() {
                 </button>
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* Notes Section */}
+        <div className="space-y-8">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-bold text-gray-900">Manage Notes</h2>
+            <Link
+              to="/my-portfolio/notes/new"
+              className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700"
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              Add New Note
+            </Link>
+          </div>
+
+          <div className="bg-white shadow-md rounded-lg overflow-hidden">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    Title
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    Category
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    Date
+                  </th>
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {notes.map((note) => (
+                  <tr key={note.id}>
+                    <td className="px-6 py-4 text-sm font-medium text-gray-900">
+                      {note.title}
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-700">
+                      {note.category}
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-700">
+                      {formatDate(note.date)}
+                    </td>
+                    <td className="px-7 py-6 whitespace-nowrap text-right flex items-end justify-end gap-4">
+                      <Link
+                        to={`/my-portfolio/notes/${note.id}/edit`}
+                        className="text-indigo-600 hover:text-indigo-900"
+                      >
+                        <Edit className="w-4 h-4" />
+                      </Link>
+                      <button
+                        // onClick={() => handleDeleteNote(note.id)}
+                        className="text-red-600 hover:text-red-900"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
