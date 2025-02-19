@@ -9,6 +9,9 @@ Welcome to my personal portfolio website! This project showcases my skills, expe
 - **Technology Filtering**: A dynamic filter system that allows users to filter projects by the technologies used.
 - **User Authentication**: Integrated with Supabase to provide user authentication, allowing users to securely sign in and manage their profiles.
 - **Real-time Data**: The portfolio is designed to allow real-time updates to projects and technologies using Supabase's real-time features.
+- **Notes Management**: A feature that allows users to create, edit, and manage technical notes with different content blocks such as text, code snippets, and images.
+- **Code Highlighting**: Integrated with a syntax highlighter to properly format and display code snippets inside notes.
+- **Category Filtering for Notes**: Users can filter notes based on categories to quickly find relevant information.
 
 ## Technologies Used
 
@@ -30,16 +33,19 @@ To run this project locally:
 
    ```bash
    git clone https://github.com/someilam/portfolio.git
+   ```
 
 ## Features to Explore
-- Home Page: Introduction and overview of the portfolio.
-- Project Details: Each project has a dedicated page with in-depth details about the project, including the technologies used and challenges overcome.
-- User Authentication: Sign in using your Supabase credentials to access a personalized experience.
-- Tech Stack Filtering: Filter projects by technologies like React, Next.js, TypeScript, etc.
-
+- **Home Page**: Introduction and overview of the portfolio.
+- **Project Details**: Each project has a dedicated page with in-depth details about the project, including the technologies used and challenges overcome.
+- **User Authentication**: Sign in using your Supabase credentials to access a personalized experience.
+- **Tech Stack Filtering**: Filter projects by technologies like React, Next.js, TypeScript, etc.
+- **Notes Section**: Store, categorize, and search through your notes for useful code snippets and concepts.
+- **Rich Text & Code Blocks**: Notes support different content types, including text, images, and syntax-highlighted code snippets.
 
 ## Contributing
 Contributions are welcome! Feel free to fork this repository and submit a pull request. If you find any issues or have suggestions for improvements, please open an issue in the repository.
 
 ## License
 This project is licensed under the MIT License.
+
