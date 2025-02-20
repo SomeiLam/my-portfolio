@@ -13,27 +13,6 @@ function NotesListPage() {
   >([]);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
-  // Filter notes by selected categories
-  const filteredNotes = selectedCategories.length
-    ? notes.filter((note) => selectedCategories.includes(note.category))
-    : notes;
-
-  const handleSelectCategory = (category: {
-    name: string;
-    category: string;
-  }) => {
-    setSelectedCategories([...selectedCategories, category.name]);
-  };
-
-  const handleRemoveCategory = (category: {
-    name: string;
-    category: string;
-  }) => {
-    setSelectedCategories(
-      selectedCategories.filter((name) => name !== category.name),
-    );
-  };
-
   useEffect(() => {
     async function fetchNotes() {
       try {
@@ -43,10 +22,11 @@ function NotesListPage() {
           .order('date', { ascending: false });
 
         if (error) throw error;
-        setNotes(data);
-        // Get unique note categories
+        setNotes(data || []);
+
+        // Extract unique categories from fetched notes
         const noteCategories = Array.from(
-          new Set(notes.map((note) => note.category)),
+          new Set(data.map((note) => note.category)),
         ).map((category) => ({ name: category, category }));
         setCategories(noteCategories);
       } catch (error) {
@@ -54,7 +34,25 @@ function NotesListPage() {
       }
     }
     fetchNotes();
-  }, [notes]);
+  }, []);
+
+  // Toggle category selection
+  const handleToggleCategory = (category: {
+    name: string;
+    category: string;
+  }) => {
+    setSelectedCategories(
+      (prev) =>
+        prev.includes(category.name)
+          ? prev.filter((name) => name !== category.name) // Remove if already selected
+          : [...prev, category.name], // Add if not selected
+    );
+  };
+
+  // Filter notes based on selected categories
+  const filteredNotes = selectedCategories.length
+    ? notes.filter((note) => selectedCategories.includes(note.category))
+    : notes;
 
   return (
     <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -65,8 +63,7 @@ function NotesListPage() {
           name,
           category: name,
         }))}
-        onSelectItem={handleSelectCategory}
-        onRemoveItem={handleRemoveCategory}
+        onToggleItem={handleToggleCategory} // Updated to use toggle
         title="Filter by Category"
       />
 
@@ -76,7 +73,7 @@ function NotesListPage() {
           <NoteCard
             key={note.id}
             note={note}
-            onClick={(note) => navigate(`/my-portfolio/notes/${note.id}`)}
+            onClick={() => navigate(`/my-portfolio/notes/${note.id}`)}
           />
         ))}
       </div>

@@ -93,23 +93,15 @@ export function ProjectDetailPage() {
         console.error('Error fetching project:', error);
       } finally {
         setLoading(false);
+        if (window.location.hash === '#comments' && commentsRef.current) {
+          commentsRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
       }
     }
 
     fetchProject();
     fetchComments();
   }, [id]);
-
-  useEffect(() => {
-    const scrollToComments = () => {
-      if (window.location.hash === '#comments' && commentsRef.current) {
-        commentsRef.current.scrollIntoView({ behavior: 'smooth' });
-      }
-    };
-
-    // Wait for the DOM to render first before scrolling
-    setTimeout(scrollToComments, 100);
-  }, []);
 
   if (loading) {
     return (

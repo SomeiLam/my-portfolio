@@ -47,6 +47,17 @@ export function HomePage() {
     }
   }
 
+  // Toggle function to select/deselect technologies
+  const handleToggleTechnology = (tech: Technology) => {
+    setSelectedTechnologies(
+      (prev) =>
+        prev.some((t) => t.name === tech.name)
+          ? prev.filter((t) => t.name !== tech.name) // Remove if already selected
+          : [...prev, tech], // Add if not selected
+    );
+  };
+
+  // Filter projects based on selected technologies
   const filteredProjects = selectedTechnologies.length
     ? projects.filter((project) =>
         selectedTechnologies.some((tech) =>
@@ -56,16 +67,6 @@ export function HomePage() {
         ),
       )
     : projects;
-
-  const handleSelectTechnology = (tech: Technology) => {
-    setSelectedTechnologies([...selectedTechnologies, tech]);
-  };
-
-  const handleRemoveTechnology = (tech: Technology) => {
-    setSelectedTechnologies(
-      selectedTechnologies.filter((t) => t.name !== tech.name),
-    );
-  };
 
   if (loading) {
     return (
@@ -80,8 +81,7 @@ export function HomePage() {
       <TechnologyFilter
         items={technologies}
         selectedItems={selectedTechnologies}
-        onSelectItem={handleSelectTechnology}
-        onRemoveItem={handleRemoveTechnology}
+        onToggleItem={handleToggleTechnology} // Updated to match refactored `TechnologyFilter`
         title="Filter by Technology"
       />
 
