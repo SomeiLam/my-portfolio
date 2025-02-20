@@ -45,3 +45,11 @@ export type Note = {
   category: string;
   details: ContentBlock[];
 };
+
+export type Comment = {
+  comment: string;
+  created_at: Date;
+  id: string;
+  name: string;
+  project_id: string;
+};

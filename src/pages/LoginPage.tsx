@@ -8,6 +8,7 @@ export function LoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [demo, setDemo] = useState('Demo User');
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -32,7 +33,7 @@ export function LoginPage() {
     }
   };
 
-  const handleLoginDemo = () => {};
+  const handleLoginDemo = () => setDemo('Coming soon...');
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -93,10 +94,10 @@ export function LoginPage() {
             </button>
           </div>
           <div
-            className="flex justify-center items-center cursor-pointer hover:underline"
+            className={`flex justify-center items-center ${demo === 'Demo User' ? 'cursor-pointer hover:underline' : ''}`}
             onClick={handleLoginDemo}
           >
-            <p>Demo User</p>
+            <p>{demo}</p>
           </div>
         </form>
       </div>

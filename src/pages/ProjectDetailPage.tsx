@@ -1,16 +1,65 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
-import { Project } from '../types';
-import { ArrowLeft, ExternalLink, Github } from 'lucide-react';
+import { Project, Comment } from '../types';
+import { ArrowLeft, ExternalLink, Github, Trash } from 'lucide-react';
 import { convertFromRaw } from 'draft-js';
 import { stateToHTML } from 'draft-js-export-html';
+import { getDaysAgo } from '../utils/helper';
+import { useAuth } from '../hooks/useAuth';
 
 export function ProjectDetailPage() {
   const { id } = useParams();
   const [project, setProject] = useState<Project | null>(null);
+  const [comments, setComments] = useState<Comment[]>([]);
   const [loading, setLoading] = useState(true);
+  const [commentLoading, setCommentLoading] = useState(false);
   const [detailsHtml, setDetailsHtml] = useState<string | null>(null);
+  const [comment, setComment] = useState('');
+  const [name, setName] = useState('');
+  const commentsRef = useRef<HTMLDivElement>(null);
+  const { user } = useAuth();
+
+  async function fetchComments() {
+    const { data, error } = await supabase
+      .from('project_comments')
+      .select('*')
+      .eq('project_id', id)
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Error fetching comments:', error.message);
+    }
+    if (data) setComments(data);
+  }
+
+  const addComment = async () => {
+    setCommentLoading(true);
+    const { error } = await supabase
+      .from('project_comments')
+      .insert([{ project_id: id, name, comment }]);
+
+    if (error) {
+      console.error('Error adding comment:', error.message);
+    }
+    setCommentLoading(false);
+  };
+
+  const deleteComment = async (commentId: string) => {
+    try {
+      const { error } = await supabase
+        .from('project_comments')
+        .delete()
+        .eq('id', commentId);
+
+      if (error) throw error;
+
+      console.log('Comment deleted successfully');
+      fetchComments();
+    } catch (error) {
+      console.error('Error deleting comment:', error);
+    }
+  };
 
   useEffect(() => {
     async function fetchProject() {
@@ -48,7 +97,19 @@ export function ProjectDetailPage() {
     }
 
     fetchProject();
+    fetchComments();
   }, [id]);
+
+  useEffect(() => {
+    const scrollToComments = () => {
+      if (window.location.hash === '#comments' && commentsRef.current) {
+        commentsRef.current.scrollIntoView({ behavior: 'smooth' });
+      }
+    };
+
+    // Wait for the DOM to render first before scrolling
+    setTimeout(scrollToComments, 100);
+  }, []);
 
   if (loading) {
     return (
@@ -150,6 +211,62 @@ export function ProjectDetailPage() {
                 </a>
               )}
             </div>
+          </div>
+        </div>
+
+        {/* Comments Section */}
+        <div ref={commentsRef} id="comments" className="mt-8">
+          <h2 className="text-2xl font-semibold mb-4">Comments</h2>
+          <div className="bg-gray-100 p-4 rounded-md">
+            {/* Comments List */}
+            {comments.length > 0 ? (
+              comments.map((comment) => (
+                <div className="flex flex-col gap-4">
+                  <div className="flex flex-row justify-between items-end">
+                    <p className="font-bold text-gray-700">{comment.name}</p>
+                    <p className="text-gray-500 text-sm">
+                      {getDaysAgo(comment.created_at)}
+                    </p>
+                  </div>
+                  <p className="text-gray-700">{comment.comment}</p>
+                  {user?.email === 'lamsomeiamy@gmail.com' && (
+                    <button onClick={() => deleteComment(comment.id)}>
+                      <Trash
+                        size="20px"
+                        className="text-red-500 hover:text-red-700"
+                      />
+                    </button>
+                  )}
+                </div>
+              ))
+            ) : (
+              <p>No comments yet. Be the first to comment!</p>
+            )}
+          </div>
+          <div className="flex flex-col gap-2 mt-10 mb-5">
+            <label className="block text-sm font-medium text-gray-700">
+              Name
+            </label>
+            <input
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="mt-1 py-2 px-4 block w-full rounded-md border-gray-300 shadow-sm"
+            />
+            <label className="block text-sm font-medium text-gray-700">
+              Comment
+            </label>
+            <input
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+              className="mt-1 py-2 px-4 block w-full rounded-md border-gray-300 shadow-sm"
+            />
+            <button
+              disabled={commentLoading}
+              onClick={addComment}
+              className="w-[150px] mt-4 px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50"
+            >
+              {commentLoading ? 'Sending...' : 'Leave a comment'}
+            </button>
           </div>
         </div>
       </div>

@@ -1,12 +1,18 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Project } from '../types';
-import { ExternalLink, Github } from 'lucide-react';
+import { ExternalLink, Github, MessageCircle } from 'lucide-react';
 
 interface ProjectCardProps {
   project: Project;
 }
 
 export function ProjectCard({ project }: ProjectCardProps) {
+  const navigate = useNavigate();
+
+  const handleNavigateToComments = () => {
+    navigate(`/my-portfolio/projects/${project.id}#comments`);
+  };
+
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden transition-transform hover:scale-[1.02]">
       <Link to={`/my-portfolio/projects/${project.id}`}>
@@ -33,7 +39,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
           </div>
         </div>
       </Link>
-      <div className="pb-6 px-6">
+      <div className="pb-6 px-6 flex justify-between">
         <div className="flex gap-4">
           {project.demo_url && (
             <a
@@ -56,6 +62,9 @@ export function ProjectCard({ project }: ProjectCardProps) {
             </a>
           )}
         </div>
+        <button onClick={handleNavigateToComments}>
+          <MessageCircle size="20px" className="hover:text-indigo-600" />
+        </button>
       </div>
     </div>
   );

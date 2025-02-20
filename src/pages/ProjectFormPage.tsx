@@ -103,8 +103,8 @@ export function ProjectFormPage() {
   useEffect(() => {
     if (id) {
       fetchProject();
-      fetchTechnologies();
     }
+    fetchTechnologies();
   }, [id]);
 
   const handleSubmit = async (e: React.FormEvent) => {
