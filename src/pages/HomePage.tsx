@@ -87,7 +87,7 @@ export function HomePage() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredProjects.map((project) => (
-          <div key={project.id}>
+          <div key={project.id} className="flex">
             <ProjectCard project={project} />
           </div>
         ))}

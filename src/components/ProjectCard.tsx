@@ -14,8 +14,11 @@ export function ProjectCard({ project }: ProjectCardProps) {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden transition-transform hover:scale-[1.02]">
-      <Link to={`/my-portfolio/projects/${project.id}`}>
+    <div className="bg-white rounded-lg shadow-md flex-grow h-full flex flex-col overflow-hidden transition-transform hover:scale-[1.02]">
+      <Link
+        to={`/my-portfolio/projects/${project.id}`}
+        className="flex-grow h-full"
+      >
         <img
           src={project.thumbnail_url}
           alt={project.title}
