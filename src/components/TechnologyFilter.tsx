@@ -13,6 +13,17 @@ interface TechnologyFilterProps {
   title: string;
 }
 
+// Define the constant order for categories
+const CATEGORY_ORDER = [
+  'Frontend',
+  'Backend',
+  'Database',
+  'Mobile',
+  'Deployment',
+  'Testing',
+  'Ai',
+];
+
 export function TechnologyFilter({
   items,
   selectedItems,
@@ -30,12 +41,18 @@ export function TechnologyFilter({
     {},
   );
 
+  // Sort categories based on CATEGORY_ORDER
+  const sortedCategories = Object.entries(groupedItems).sort(
+    ([catA], [catB]) =>
+      CATEGORY_ORDER.indexOf(catA) - CATEGORY_ORDER.indexOf(catB),
+  );
+
   return (
     <div className="mb-8">
       <h2 className="text-xl font-semibold mb-4">{title}</h2>
 
-      {/* Display items by category */}
-      {Object.entries(groupedItems).map(([category, categoryItems]) => {
+      {/* Display items by sorted category */}
+      {sortedCategories.map(([category, categoryItems]) => {
         const displayedItems = showMore
           ? categoryItems
           : categoryItems.slice(0, 6); // Show more logic
