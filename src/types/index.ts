@@ -44,6 +44,7 @@ export type Note = {
   date: string;
   category: string;
   details: ContentBlock[];
+  isPrivate: boolean;
 };
 
 export type Comment = {

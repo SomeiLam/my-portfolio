@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { NoteCard } from '../components/NoteCard';
 import { TechnologyFilter } from '../components/TechnologyFilter';
 import { supabase } from '../lib/supabase';
+import { useAuth } from '../hooks/useAuth';
 
 function NotesListPage() {
   const navigate = useNavigate();
@@ -12,6 +13,7 @@ function NotesListPage() {
     { name: string; category: string }[]
   >([]);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const { user } = useAuth();
 
   useEffect(() => {
     async function fetchNotes() {
@@ -22,7 +24,8 @@ function NotesListPage() {
           .order('date', { ascending: false });
 
         if (error) throw error;
-        setNotes(data || []);
+        const notes = user ? data : data.filter((d) => !d.is_private);
+        setNotes(notes || []);
 
         // Extract unique categories from fetched notes
         const noteCategories = Array.from(
@@ -34,7 +37,7 @@ function NotesListPage() {
       }
     }
     fetchNotes();
-  }, []);
+  }, [user]);
 
   // Toggle category selection
   const handleToggleCategory = (category: {

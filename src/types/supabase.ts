@@ -48,6 +48,7 @@ export interface Database {
           details: ContentBlock[]; // Rich text content stored as JSONB
           date: string; // Timestamp
           user_id: string | null; // References auth.users
+          is_private: boolean;
         };
         Insert: {
           id?: string;
@@ -56,6 +57,7 @@ export interface Database {
           details: ContentBlock[];
           date?: string;
           user_id?: string | null;
+          is_private: boolean;
         };
         Update: Partial<Database['public']['Tables']['notes']['Insert']>;
       };

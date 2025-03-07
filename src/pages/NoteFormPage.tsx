@@ -15,6 +15,7 @@ export function NoteFormPage() {
   const [title, setTitle] = useState('');
   const [blocks, setBlocks] = useState<ContentBlock[]>([]);
   const [category, setCategory] = useState('');
+  const [isPrivate, setIsPrivate] = useState(false);
 
   // Fetch existing note if editing
   useEffect(() => {
@@ -31,6 +32,7 @@ export function NoteFormPage() {
         setTitle(data.title);
         setCategory(data.category);
         setBlocks(data.details || []);
+        setIsPrivate(data.is_private);
       } catch (error) {
         console.error('Error fetching note:', error);
         setError('Failed to load note');
@@ -90,6 +92,7 @@ export function NoteFormPage() {
       category,
       details: blocks,
       user_id: user?.id,
+      is_private: isPrivate,
     };
 
     try {
@@ -287,21 +290,50 @@ export function NoteFormPage() {
 
           {error && <div className="text-red-600 text-sm">{error}</div>}
 
-          <div className="flex justify-end gap-4">
-            <button
-              type="button"
-              onClick={() => navigate('/my-portfolio/manage-projects')}
-              className="px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              disabled={loading}
-              className="px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50"
-            >
-              {id ? 'Update Note' : 'Create Note'}
-            </button>
+          <div className="flex justify-between items-center flex-wrap w-full">
+            <div className="flex gap-2">
+              <span>Public: </span>
+              <div
+                style={{
+                  width: '50px',
+                  height: '25px',
+                  backgroundColor: isPrivate ? 'gray' : 'green',
+                  borderRadius: '12.5px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  padding: '2px',
+                  cursor: 'pointer',
+                }}
+                onClick={() => setIsPrivate(!isPrivate)}
+              >
+                <div
+                  style={{
+                    width: '21px',
+                    height: '21px',
+                    backgroundColor: 'white',
+                    borderRadius: '50%',
+                    transform: isPrivate ? 'translateX(0)' : 'translateX(25px)',
+                    transition: 'transform 0.3s ease',
+                  }}
+                />
+              </div>
+            </div>
+            <div className="flex justify-end gap-4">
+              <button
+                type="button"
+                onClick={() => navigate('/my-portfolio/manage-projects')}
+                className="px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={loading}
+                className="px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50"
+              >
+                {id ? 'Update Note' : 'Create Note'}
+              </button>
+            </div>
           </div>
         </form>
       </div>
