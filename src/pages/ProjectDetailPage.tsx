@@ -7,6 +7,7 @@ import { convertFromRaw } from 'draft-js';
 import { stateToHTML } from 'draft-js-export-html';
 import { getDaysAgo } from '../utils/helper';
 import { useAuth } from '../hooks/useAuth';
+import Layout from './Layout';
 
 export function ProjectDetailPage() {
   const { id } = useParams();
@@ -120,8 +121,8 @@ export function ProjectDetailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <Layout>
+      <div className="min-h-screen bg-gray-50">
         <Link
           to="/my-portfolio"
           className="inline-flex items-center text-indigo-600 hover:text-indigo-800 mb-8"
@@ -262,6 +263,6 @@ export function ProjectDetailPage() {
           </div>
         </div>
       </div>
-    </div>
+    </Layout>
   );
 }

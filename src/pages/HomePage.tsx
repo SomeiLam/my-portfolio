@@ -3,6 +3,7 @@ import { supabase } from '../lib/supabase';
 import { Project, Technology } from '../types';
 import { TechnologyFilter } from '../components/TechnologyFilter';
 import { ProjectCard } from '../components/ProjectCard';
+import Layout from './Layout';
 
 export function HomePage() {
   const [selectedTechnologies, setSelectedTechnologies] = useState<
@@ -77,7 +78,7 @@ export function HomePage() {
   }
 
   return (
-    <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <Layout>
       <TechnologyFilter
         items={technologies}
         selectedItems={selectedTechnologies}
@@ -100,6 +101,6 @@ export function HomePage() {
           </p>
         </div>
       )}
-    </main>
+    </Layout>
   );
 }

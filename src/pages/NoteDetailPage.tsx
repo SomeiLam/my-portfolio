@@ -5,6 +5,7 @@ import { Note } from '../types';
 import { ArrowLeft } from 'lucide-react';
 import { formatDate } from '../utils/helper';
 import { CodeBlock } from '../components/CodeBlock';
+import Layout from './Layout';
 
 export function NoteDetailPage() {
   const { id } = useParams();
@@ -60,7 +61,7 @@ export function NoteDetailPage() {
   }
 
   return (
-    <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <Layout>
       <div className="bg-white rounded-lg shadow-md">
         <div className="px-6 py-4 border-b border-gray-200">
           <Link
@@ -115,6 +116,6 @@ export function NoteDetailPage() {
           </div>
         </div>
       </div>
-    </main>
+    </Layout>
   );
 }

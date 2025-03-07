@@ -5,6 +5,7 @@ import { NoteCard } from '../components/NoteCard';
 import { TechnologyFilter } from '../components/TechnologyFilter';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../hooks/useAuth';
+import Layout from './Layout';
 
 function NotesListPage() {
   const navigate = useNavigate();
@@ -58,7 +59,7 @@ function NotesListPage() {
     : notes;
 
   return (
-    <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <Layout>
       {/* Category Filter for Notes */}
       <TechnologyFilter
         items={categories}
@@ -86,7 +87,7 @@ function NotesListPage() {
           <p className="text-gray-500 text-lg">No notes found.</p>
         </div>
       )}
-    </main>
+    </Layout>
   );
 }
 
