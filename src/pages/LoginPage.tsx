@@ -8,7 +8,6 @@ export function LoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [demo, setDemo] = useState('Demo User');
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -33,10 +32,30 @@ export function LoginPage() {
     }
   };
 
-  const handleLoginDemo = () => setDemo('Coming soon...');
+  const handleLoginDemo = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+
+    try {
+      const { error } = await supabase.auth.signInWithPassword({
+        email: import.meta.env.VITE_DEMO_EMAIL as string,
+        password: import.meta.env.VITE_DEMO_EMAIL_PASSWORD as string,
+      });
+
+      if (error) throw error;
+      navigate('/my-portfolio/manage-projects');
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : 'An unknown error occurred',
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div className="h-full bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div>
           <div className="mx-auto h-12 w-12 flex items-center justify-center rounded-full bg-indigo-100">
@@ -94,10 +113,10 @@ export function LoginPage() {
             </button>
           </div>
           <div
-            className={`flex justify-center items-center ${demo === 'Demo User' ? 'cursor-pointer hover:underline' : ''}`}
+            className={`flex justify-center items-center cursor-pointer hover:underline`}
             onClick={handleLoginDemo}
           >
-            <p>{demo}</p>
+            <p>Demo User</p>
           </div>
         </form>
       </div>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Editor, EditorState, RichUtils } from 'draft-js';
 import 'draft-js/dist/Draft.css';
 import { Code, Type } from 'lucide-react';
@@ -12,6 +12,8 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
   editorState,
   setEditorState,
 }) => {
+  const editorRef = useRef<Editor>(null);
+
   // Handle block type changes (H1 - H6, P, Lists, etc.)
   const toggleBlockType = (blockType: string) => {
     setEditorState(RichUtils.toggleBlockType(editorState, blockType));
@@ -29,6 +31,10 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
     GREEN: { color: '#22c55e' }, // Tailwind Green-500
     PURPLE: { color: '#a855f7' }, // Tailwind Purple-500
     ORANGE: { color: '#f97316' }, // Tailwind Orange-500
+  };
+
+  const focusEditor = () => {
+    editorRef.current?.focus();
   };
 
   return (
@@ -122,9 +128,10 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
       {/* Editor */}
       <div
         className="border p-3 rounded min-h-[150px] focus:outline-none"
-        onClick={() => setEditorState(EditorState.moveFocusToEnd(editorState))}
+        onClick={focusEditor}
       >
         <Editor
+          ref={editorRef}
           editorState={editorState}
           onChange={setEditorState}
           customStyleMap={customStyleMap} // ✅ Apply color styles

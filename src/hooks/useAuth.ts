@@ -8,12 +8,16 @@ export type User = {
 
 export function useAuth() {
   const [user, setUser] = useState<User | null>(null);
+  const [demo, setDemo] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
+      if (session?.user?.email === import.meta.env.VITE_DEMO_EMAIL) {
+        setDemo(true);
+      }
       setLoading(false);
     });
 
@@ -28,5 +32,5 @@ export function useAuth() {
     return () => subscription.unsubscribe();
   }, []);
 
-  return { user, loading };
+  return { user, demo, setDemo, loading };
 }

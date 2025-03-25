@@ -11,7 +11,7 @@ export function NoteFormPage() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const { user } = useAuth();
+  const { user, demo } = useAuth();
 
   const [title, setTitle] = useState('');
   const [blocks, setBlocks] = useState<ContentBlock[]>([]);
@@ -85,6 +85,11 @@ export function NoteFormPage() {
   // Handle form submission (Create or Update Note)
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (demo) {
+      alert('This action is not allowed in demo mode');
+      return;
+    }
+
     setLoading(true);
     setError('');
 

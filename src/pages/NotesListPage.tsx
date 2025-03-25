@@ -14,7 +14,7 @@ function NotesListPage() {
     { name: string; category: string }[]
   >([]);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const { user } = useAuth();
+  const { user, demo } = useAuth();
 
   useEffect(() => {
     async function fetchNotes() {
@@ -25,7 +25,7 @@ function NotesListPage() {
           .order('date', { ascending: false });
 
         if (error) throw error;
-        const notes = user ? data : data.filter((d) => !d.is_private);
+        const notes = user && !demo ? data : data.filter((d) => !d.is_private);
         setNotes(notes || []);
 
         // Extract unique categories from fetched notes

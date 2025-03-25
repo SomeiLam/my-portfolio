@@ -25,7 +25,7 @@ export function ManageProjectPage() {
   });
   const [editingTech, setEditingTech] = useState<Technology | null>(null);
   const [editForm, setEditForm] = useState<Partial<Technology>>({});
-  const { user } = useAuth();
+  const { user, demo } = useAuth();
 
   useEffect(() => {
     fetchProjects();
@@ -71,13 +71,18 @@ export function ManageProjectPage() {
         .order('date', { ascending: false });
 
       if (error) throw error;
-      setNotes(data);
+      const notes = user && !demo ? data : data.filter((d) => !d.is_private);
+      setNotes(notes);
     } catch (error) {
       console.error('Error fetching notes:', error);
     }
   }
 
   async function handleDelete(id: string) {
+    if (demo) {
+      alert('This action is not allowed in demo mode');
+      return;
+    }
     if (!window.confirm('Are you sure you want to delete this project?'))
       return;
 
@@ -91,6 +96,10 @@ export function ManageProjectPage() {
   }
 
   const handleAddTechnology = async () => {
+    if (demo) {
+      alert('This action is not allowed in demo mode');
+      return;
+    }
     if (!newTechnology.name || !newTechnology.category) {
       alert('Please fill in both name and category');
       return;
@@ -139,6 +148,10 @@ export function ManageProjectPage() {
   };
 
   const handleEditTechnology = (tech: Technology) => {
+    if (demo) {
+      alert('This action is not allowed in demo mode');
+      return;
+    }
     setEditingTech(tech);
     setEditForm({ ...tech });
   };
@@ -192,6 +205,11 @@ export function ManageProjectPage() {
 
   // Function to handle deleting a technology
   const handleDeleteTechnology = async (tech: Technology) => {
+    if (demo) {
+      alert('This action is not allowed in demo mode');
+      return;
+    }
+
     if (!window.confirm('Are you sure you want to delete this technology?'))
       return;
 

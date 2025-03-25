@@ -16,6 +16,7 @@ export function ProjectFormPage() {
   const [error, setError] = useState('');
   const [technologies, setTechnologies] = useState<Technology[]>([]);
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
+  const { demo } = useAuth();
 
   const [isDragging, setIsDragging] = useState(false);
   const { user } = useAuth();
@@ -67,6 +68,10 @@ export function ProjectFormPage() {
   });
 
   const uploadImage = async (file: File) => {
+    if (demo) {
+      alert('This action is not allowed in demo mode');
+      return;
+    }
     const fileExt = file.name.split('.').pop(); // Get file extension
     const timestamp = Date.now(); // Get the current timestamp
     const fileName = `${user?.id}-${timestamp}.${fileExt}`; // Generate a unique name using timestamp
@@ -97,7 +102,6 @@ export function ProjectFormPage() {
       return;
     }
 
-    console.log('Image URL:', imageUrl);
     return imageUrl; // You can use this URL to save in your database or display
   };
 
@@ -110,6 +114,10 @@ export function ProjectFormPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (demo) {
+      alert('This action is not allowed in demo mode');
+      return;
+    }
     setLoading(true);
     setError('');
 

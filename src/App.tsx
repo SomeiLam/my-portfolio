@@ -6,11 +6,12 @@ import { LoginPage } from './pages/LoginPage';
 import { ManageProjectPage } from './pages/ManageProjectPage';
 import { ProjectFormPage } from './pages/ProjectFormPage';
 import { ProjectDetailPage } from './pages/ProjectDetailPage';
-import { HomePage } from './pages/HomePage';
+import Projects from './pages/Projects';
 import Appbar from './components/Appbar';
 import { NotesListPage } from './pages/NotesListPage';
 import { NoteFormPage } from './pages/NoteFormPage';
 import { NoteDetailPage } from './pages/NoteDetailPage';
+import HomePage from './pages/HomePage';
 
 function App() {
   const { user } = useAuth();
@@ -25,8 +26,8 @@ function App() {
                 to="/my-portfolio"
                 className="flex flex-row items-center gap-3 w-full"
               >
-                <Code2 className="w-8 h-8 text-indigo-600" />
-                <h1 className="text-3xl font-bold text-gray-900">
+                <Code2 className="w-8 h-8 text-gray-900" />
+                <h1 className="text-lg sm:text-3xl font-bold text-gray-900">
                   Amy Lam's Portfolio
                 </h1>
               </Link>
@@ -37,6 +38,7 @@ function App() {
 
         <Routes>
           <Route path="/my-portfolio" element={<HomePage />} />
+          <Route path="/my-portfolio/projects" element={<Projects />} />
           <Route path="/my-portfolio/login" element={<LoginPage />} />
           <Route
             path="/my-portfolio/projects/:id"
