@@ -124,7 +124,7 @@ export function ProjectDetailPage() {
     <Layout>
       <div className="min-h-screen bg-gray-50">
         <Link
-          to="/my-portfolio"
+          to="/my-portfolio/projects"
           className="inline-flex items-center text-indigo-600 hover:text-indigo-800 mb-8"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
