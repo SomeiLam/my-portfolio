@@ -12,6 +12,7 @@ import { NotesListPage } from './pages/NotesListPage';
 import { NoteFormPage } from './pages/NoteFormPage';
 import { NoteDetailPage } from './pages/NoteDetailPage';
 import HomePage from './pages/HomePage';
+import NotFound from './components/NotFound';
 
 function App() {
   const { user } = useAuth();
@@ -86,6 +87,7 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
     </BrowserRouter>

@@ -1,7 +1,7 @@
 import { Github, Linkedin, ExternalLink } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
-const Homepage = () => {
+const HomePage = () => {
   const navigate = useNavigate();
   return (
     <div className="min-h-screen">
@@ -130,4 +130,4 @@ const Homepage = () => {
   );
 };
 
-export default Homepage;
+export default HomePage;
