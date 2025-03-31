@@ -1,42 +1,23 @@
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
-import { Code2 } from 'lucide-react';
-import { useAuth } from './hooks/useAuth';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { LoginPage } from './pages/LoginPage';
 import { ManageProjectPage } from './pages/ManageProjectPage';
 import { ProjectFormPage } from './pages/ProjectFormPage';
 import { ProjectDetailPage } from './pages/ProjectDetailPage';
 import Projects from './pages/Projects';
-import Appbar from './components/Appbar';
 import { NotesListPage } from './pages/NotesListPage';
 import { NoteFormPage } from './pages/NoteFormPage';
 import { NoteDetailPage } from './pages/NoteDetailPage';
 import HomePage from './pages/HomePage';
 import NotFound from './components/NotFound';
+import './App.css';
+import Header from './components/Header';
 
 function App() {
-  const { user } = useAuth();
-
   return (
     <BrowserRouter>
       <div className="min-h-screen bg-gray-50">
-        <header className="bg-white shadow-sm">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-            <div className="flex items-center justify-between">
-              <Link
-                to="/my-portfolio"
-                className="flex flex-row items-center gap-3 w-full"
-              >
-                <Code2 className="w-8 h-8 text-gray-900" />
-                <h1 className="text-lg sm:text-3xl font-bold text-gray-900">
-                  Amy Lam's Portfolio
-                </h1>
-              </Link>
-              <Appbar user={user} />
-            </div>
-          </div>
-        </header>
-
+        <Header />
         <Routes>
           <Route path="/my-portfolio" element={<HomePage />} />
           <Route path="/my-portfolio/projects" element={<Projects />} />

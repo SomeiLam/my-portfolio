@@ -4,11 +4,17 @@ import { useNavigate } from 'react-router-dom';
 const HomePage = () => {
   const navigate = useNavigate();
   return (
-    <div className="min-h-screen">
+    <div
+      className="min-h-screen"
+      style={{
+        background:
+          'radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%)',
+      }}
+    >
       {/* Hero Section */}
-      <section className="relative px-4 pt-20 pb-16 sm:px-6 lg:px-8 lg:pt-32 bg-gray-800">
+      <section className="relative px-4 pt-20 pb-16 sm:px-6 lg:px-8 lg:pt-32">
         <div className="mx-auto max-w-7xl text-center">
-          <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-7xl">
+          <h1 className="title-text sm:text-7xl">
             Frontend & Full Stack Developer
           </h1>
           <p className="mt-6 text-lg leading-8 text-gray-200 max-w-3xl mx-auto">
@@ -44,7 +50,7 @@ const HomePage = () => {
           </div>
         </div>
       </section>
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-50">
+      <section className="py-16 px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-3xl">
           <h2 className="text-3xl font-bold text-center mb-8 text-gray-900">
             About Me
@@ -106,16 +112,16 @@ const HomePage = () => {
             ].map((section) => (
               <div
                 key={section.title}
-                className="bg-white/80 backdrop-blur-lg rounded-2xl p-8 shadow-lg hover:scale-105 transition-transform"
+                className="backdrop-blur-lg backdrop-saturate-[180%] bg-black/25  border border-white/10  filter drop-shadow-[0_30px_10px_rgba(0,0,0,0.125)] rounded-2xl p-8 shadow-lg hover:scale-105 transition-transform"
               >
-                <h3 className="text-xl font-semibold mb-6 text-gray-600">
+                <h3 className="text-xl font-semibold mb-6 text-gray-200">
                   {section.title}
                 </h3>
                 <div className="flex flex-wrap gap-2">
                   {section.skills.map((skill) => (
                     <span
                       key={skill}
-                      className="px-3 py-1 rounded-full text-sm bg-indigo-50 text-gray-700"
+                      className="px-3 py-1 rounded-full text-sm backdrop-blur-lg backdrop-saturate-[120%] text-gray-300"
                     >
                       {skill}
                     </span>
