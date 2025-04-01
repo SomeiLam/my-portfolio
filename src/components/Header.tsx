@@ -6,7 +6,9 @@ import Appbar from './Appbar';
 const Header = () => {
   const { user } = useAuth();
   const location = useLocation();
-  const isHomePage = location.pathname === '/my-portfolio'; // Check if it's the home page
+  const isHomePage =
+    location.pathname === '/my-portfolio/' ||
+    location.pathname === '/my-portfolio';
 
   return (
     !isHomePage && (
