@@ -11,3 +11,47 @@ body {
     0 0 40px #ff005e,
     0 0 80px #ff005e;
 }
+
+.gradient-bg {
+  background-color: #f5e5e8; /* A light pinkish fallback */
+
+  background:
+
+      /* Bottom layer: Larger Pinkish blob */ radial-gradient(
+    circle at 35% 45%,
+
+    rgba(238, 174, 202, 0.6) 0%,
+
+    /* Original color 1, now 80% opaque */ rgba(231, 60, 126, 0.6) 20%,
+
+    /* Original color 2, now 70% opaque */ rgba(240, 120, 90, 0.6) 50%,
+
+    /* Original color 3, now 70% opaque */ rgba(35, 166, 213, 0.6) 60%
+  );
+
+  background-size: 400% 400%;
+
+  animation: gradientAnimation 15s ease infinite;
+}
+
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 50%;
+  } /* Start */
+
+  15% {
+    background-position: 40% 90%;
+  } /* Quick move to bottom-left area */
+
+  40% {
+    background-position: 90% 75%;
+  } /* Slower move to right */
+
+  70% {
+    background-position: 60% 10%;
+  } /* Moderate move to top-right area */
+
+  100% {
+    background-position: 0% 50%;
+  } /* Slower return to start */
+}

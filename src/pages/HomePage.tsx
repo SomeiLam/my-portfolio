@@ -49,27 +49,26 @@ const HomePage = () => {
   };
 
   return (
-    <div
-      ref={scrollContainerRef}
-      className="h-screen snap-y snap-mandatory overflow-y-scroll scroll-smooth"
-      style={{
-        background:
-          'radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%)',
-      }}
-    >
-      <HeroSection />
+    <div className="gradient-bg relative h-screen overflow-hidden">
+      {/* Fixed white circle "rug" in the background */}
+      <div className="fixed rounded-full bg-[rgba(255,255,255,.5)] h-[100vh] w-[100vh] sm:h-[80vw] sm:w-[80vw] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
 
-      <AboutSection />
-
-      <SkillsSection />
-      {showScrollDown && (
-        <button
-          onClick={scrollToNext}
-          className="fixed bottom-6 left-1/2 transform -translate-x-1/2 p-3 rounded-full text-black hover:scale-125 transition-transform duration-300 ease-in-out z-50"
-        >
-          <ChevronDown className="h-8 w-8 animate-bounce" />
-        </button>
-      )}
+      <div
+        ref={scrollContainerRef}
+        className="h-screen snap-y snap-mandatory overflow-y-scroll scroll-smooth relative" // Added relative here
+      >
+        <HeroSection />
+        <AboutSection />
+        <SkillsSection />
+        {showScrollDown && (
+          <button
+            onClick={scrollToNext}
+            className="fixed bottom-6 left-1/2 transform -translate-x-1/2 p-3 rounded-full text-black hover:scale-125 transition-transform duration-300 ease-in-out z-40"
+          >
+            <ChevronDown className="h-8 w-8 animate-bounce" />
+          </button>
+        )}
+      </div>
     </div>
   );
 };

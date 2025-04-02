@@ -68,10 +68,10 @@ const SkillsSection = () => {
           ))}
         </div>
       </div>
-      <div className="">
+      <div className="z-50">
         <button
           onClick={() => navigate('/my-portfolio/projects')}
-          className="inline-flex items-center px-8 py-3 rounded-lg bg-[rgba(255,220,25,0.7)] text-black hover:bg-yellow-300 transition-all shadow-md hover:shadow-lg"
+          className="inline-flex items-center px-8 py-3 rounded-lg bg-[rgba(255,220,25,1)] text-black hover:bg-yellow-300 transition-all shadow-md hover:shadow-lg"
         >
           View Projects
           <ExternalLink className="ml-2 h-5 w-5" />
