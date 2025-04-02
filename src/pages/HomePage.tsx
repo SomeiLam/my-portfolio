@@ -49,13 +49,13 @@ const HomePage = () => {
   };
 
   return (
-    <div className="gradient-bg relative h-screen overflow-hidden">
+    <div className="gradient-bg relative sm:h-screen overflow-hidden">
       {/* Fixed white circle "rug" in the background */}
       <div className="fixed rounded-full bg-[rgba(255,255,255,.5)] h-[100vh] w-[100vh] sm:h-[80vw] sm:w-[80vw] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
 
       <div
         ref={scrollContainerRef}
-        className="h-screen snap-y snap-mandatory overflow-y-scroll scroll-smooth relative" // Added relative here
+        className="sm:h-screen sm:snap-y sm:snap-mandatory overflow-y-scroll scroll-smooth relative" // Added relative here
       >
         <HeroSection />
         <AboutSection />
@@ -63,7 +63,7 @@ const HomePage = () => {
         {showScrollDown && (
           <button
             onClick={scrollToNext}
-            className="fixed bottom-6 left-1/2 transform -translate-x-1/2 p-3 rounded-full text-black hover:scale-125 transition-transform duration-300 ease-in-out z-40"
+            className="hidden sm:flex fixed bottom-6 left-1/2 transform -translate-x-1/2 p-3 rounded-full text-black hover:scale-125 transition-transform duration-300 ease-in-out z-40"
           >
             <ChevronDown className="h-8 w-8 animate-bounce" />
           </button>

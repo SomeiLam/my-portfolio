@@ -6,7 +6,7 @@ const SkillsSection = () => {
   return (
     <section
       id="skills"
-      className="h-screen mx-auto max-w-7xl snap-start flex flex-col items-center justify-between px-4 pt-20 pb-8 sm:px-6 lg:px-8 lg:pt-32"
+      className="sm:h-screen mx-auto max-w-7xl snap-start flex flex-col items-center justify-between gap-10 px-4 pt-20 pb-8 sm:px-6 lg:px-8 lg:pt-32"
     >
       <div>
         <h2 className="text-3xl font-bold text-center mb-16 text-gray-700">

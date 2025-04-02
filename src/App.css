@@ -55,3 +55,10 @@ body {
     background-position: 0% 50%;
   } /* Slower return to start */
 }
+
+@media (max-width: 767px) {
+  /* Example breakpoint for mobile */
+  .snap-container {
+    scroll-snap-type: y none; /* Remove mandatory snapping */
+  }
+}

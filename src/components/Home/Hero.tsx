@@ -8,7 +8,8 @@ const HeroSection = () => {
   return (
     <section
       id="hero"
-      className="h-screen snap-start max-w-7xl mx-auto px-4 pb-16 sm:px-6 lg:px-8 pt-[5%]"
+      className="sm:min-h-screen sm:snap-start max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
+      style={{ paddingTop: '15vh', paddingBottom: '15vh' }}
     >
       <div className="flex flex-col items-center text-center h-full z-10 relative">
         <div className="relative w-max">
