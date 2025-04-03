@@ -3,10 +3,15 @@ import HeroSection from '../components/Home/Hero';
 import AboutSection from '../components/Home/About';
 import { ChevronDown } from 'lucide-react';
 import SkillsSection from '../components/Home/Skills';
+import CustomCursor from '../components/Home/CustomCursor';
 
 const HomePage = () => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [showScrollDown, setShowScrollDown] = useState(true);
+
+  const isTouchDevice = () => {
+    return 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+  };
 
   const handleScroll = () => {
     const el = scrollContainerRef.current;
@@ -49,9 +54,10 @@ const HomePage = () => {
   };
 
   return (
-    <div className="gradient-bg relative sm:h-screen overflow-hidden">
+    <div className="gradient-bg relative sm:h-screen overflow-hidden cursor-none">
       {/* Fixed white circle "rug" in the background */}
       <div className="fixed rounded-full bg-[rgba(255,255,255,.5)] h-[100vh] w-[100vh] sm:h-[80vw] sm:w-[80vw] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+      {!isTouchDevice() && <CustomCursor />}
 
       <div
         ref={scrollContainerRef}
