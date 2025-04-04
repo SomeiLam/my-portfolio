@@ -14,8 +14,8 @@ const SkillsSection = () => {
         inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
       }`}
     >
-      <div>
-        <h2 className="text-3xl font-bold text-center mb-16 text-gray-700">
+      <div className="flex flex-col items-center justify-center h-full">
+        <h2 className="text-3xl font-bold text-center mb-16 text-gray-600">
           Technical Expertise
         </h2>
         <div className="grid md:grid-cols-3 gap-8">
@@ -55,7 +55,7 @@ const SkillsSection = () => {
           ].map((section) => (
             <div
               key={section.title}
-              className="backdrop-blur-lg backdrop-saturate-[180%] bg-black/25  border border-white/10  filter drop-shadow-[0_30px_10px_rgba(0,0,0,0.125)] rounded-2xl p-8 shadow-lg hover:scale-105 transition-transform"
+              className="bg-black/25  border border-white/10 rounded-2xl p-8 shadow-lg hover:scale-105 transition-transform"
             >
               <h3 className="text-xl font-semibold mb-6 text-gray-200">
                 {section.title}
@@ -64,7 +64,7 @@ const SkillsSection = () => {
                 {section.skills.map((skill) => (
                   <span
                     key={skill}
-                    className="px-3 py-1 rounded-full text-sm backdrop-blur-lg backdrop-saturate-[120%] text-gray-300"
+                    className="px-3 py-1 rounded-full text-sm bg-black/15 text-gray-300"
                   >
                     {skill}
                   </span>
