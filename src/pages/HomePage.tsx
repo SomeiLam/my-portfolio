@@ -56,7 +56,7 @@ const HomePage = () => {
   return (
     <div className="gradient-bg relative sm:h-screen overflow-hidden cursor-none">
       {/* Fixed white circle "rug" in the background */}
-      <div className="fixed rounded-full bg-[rgba(255,255,255,.5)] h-[100vh] w-[100vh] sm:h-[80vw] sm:w-[80vw] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+      <div className="fixed rounded-full bg-[rgba(255,255,255,.5)] h-[100vh] w-[100vh] lg:h-[120vh] lg:w-[120vh] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
       {!isTouchDevice() && <CustomCursor />}
 
       <div

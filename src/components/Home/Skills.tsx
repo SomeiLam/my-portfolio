@@ -1,12 +1,18 @@
 import { ExternalLink } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useInViewObserver } from '../../hooks/useInViewObserver';
 
 const SkillsSection = () => {
   const navigate = useNavigate();
+  const { ref, inView } = useInViewObserver();
+
   return (
     <section
       id="skills"
-      className="sm:h-screen mx-auto max-w-7xl snap-start flex flex-col items-center justify-between gap-10 px-4 pt-20 pb-8 sm:px-6 lg:px-8 lg:pt-32"
+      ref={ref}
+      className={`sm:h-screen mx-auto max-w-7xl snap-start flex flex-col items-center justify-between gap-10 px-4 pt-20 pb-8 sm:px-6 lg:px-8 lg:pt-32 transition-opacity duration-700 ease-in-out ${
+        inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+      }`}
     >
       <div>
         <h2 className="text-3xl font-bold text-center mb-16 text-gray-700">

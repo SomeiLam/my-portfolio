@@ -1,8 +1,15 @@
+import { useInViewObserver } from '../../hooks/useInViewObserver';
+
 const AboutSection = () => {
+  const { ref, inView } = useInViewObserver();
+
   return (
     <section
       id="about"
-      className="sm:h-screen sm:snap-start flex flex-col items-center mx-auto max-w-3xl justify-center py-16 px-4 sm:px-6 lg:px-8"
+      ref={ref}
+      className={`sm:h-screen sm:snap-start flex flex-col items-center mx-auto max-w-3xl justify-center py-16 px-4 sm:px-6 lg:px-8 transition-opacity duration-700 ease-in-out ${
+        inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+      }`}
     >
       <h2 className="text-3xl font-bold text-center mb-8 text-gray-600">
         About Me

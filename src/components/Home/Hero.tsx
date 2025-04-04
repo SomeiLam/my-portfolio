@@ -1,15 +1,19 @@
 import { ExternalLink, Github, Linkedin } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import amyImage from '../../assets/amy.jpeg'; // Ensure the image path is correct
+import amyImage from '../../assets/amy.jpeg';
+import { useInViewObserver } from '../../hooks/useInViewObserver';
 
 const HeroSection = () => {
   const navigate = useNavigate();
+  const { ref, inView } = useInViewObserver();
 
   return (
     <section
       id="hero"
-      className="sm:min-h-screen sm:snap-start max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
-      style={{ paddingTop: '15vh', paddingBottom: '15vh' }}
+      ref={ref}
+      className={`sm:min-h-screen sm:snap-start max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-[15vh] pb-[15vh] transition-opacity duration-700 ease-in-out ${
+        inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+      }`}
     >
       <div className="flex flex-col items-center text-center h-full z-10 relative">
         <div className="relative w-max">
