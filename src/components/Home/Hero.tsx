@@ -1,23 +1,26 @@
 import { ExternalLink, Github, Linkedin } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import amyImage from '../../assets/amy.jpeg';
-import { useInViewObserver } from '../../hooks/useInViewObserver';
+import { motion } from 'framer-motion';
 
 const HeroSection = () => {
   const navigate = useNavigate();
-  const { ref, inView } = useInViewObserver();
 
   return (
-    <section
+    <motion.section
       id="hero"
-      ref={ref}
-      className={`sm:min-h-screen sm:snap-start max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-[15vh] pb-[15vh] transition-opacity duration-700 ease-in-out ${
-        inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-      }`}
+      className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-[5vh] pb-[15vh] transition-opacity duration-700 ease-in-out"
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0 }}
+      transition={{ duration: 1 }}
     >
-      <div className="flex flex-col items-center text-center h-full z-10 relative">
+      <div className="flex flex-col lg:flex-row lg:mt-40 items-center text-center h-full z-10 relative">
         <div className="relative w-max">
-          <svg viewBox="0 0 800 640" className="w-72 h-72 sm:w-96 sm:h-96">
+          <svg
+            viewBox="0 0 800 640"
+            className="w-96 h-96 lg:w-[500px] lg:h-[500px]"
+          >
             {/* Circular Path for the Image */}
             <clipPath id="circleClip">
               <circle cx="400" cy="300" r="280" />
@@ -51,45 +54,52 @@ const HeroSection = () => {
             </text>
           </svg>
         </div>
+        <div className="max-w-2xl lg:text-start text-center z-20 mt-[-50px]">
+          <h1 className="text-2xl lg:text-3xl">
+            Hello, I am Amy,
+            <p className="title-text font-bold py-2">
+              Frontend-focused Full Stack Developer
+            </p>{' '}
+            based in San Francisco Bay Area
+          </h1>
 
-        <h1 className="title-text text-2xl sm:text-5xl font-bold">
-          Frontend & Full Stack Developer
-        </h1>
-        <p className="mt-6 text-sm sm:text-lg leading-8 text-gray-500 max-w-5xl mx-auto">
-          Passionate developer crafting exceptional digital experiences with
-          React, TypeScript, and Node.js.
-        </p>
-        <div className="mt-8 flex gap-4 justify-center">
-          <button
-            onClick={() => navigate('/my-portfolio/projects')}
-            className="inline-flex items-center px-8 py-3 rounded-lg bg-[rgba(255,220,25,0.7)] text-black hover:bg-yellow-300 transition-all shadow-md hover:shadow-lg"
-          >
-            View Projects
-            <ExternalLink className="ml-2 h-5 w-5" />
-          </button>
-          <div className="flex gap-2">
-            <a
-              href="https://github.com/SomeiLam"
-              className="p-3 rounded-full hover:bg-[rgba(255,220,25,0.4)] transition group"
-              target="_blank"
-              rel="noreferrer"
+          <p className="mt-6 text-sm sm:text-lg leading-8 text-slate-700">
+            I am a passionate developer with over 3 years hands-on experience
+            building exceptional digital experiences with React, TypeScript, and
+            Node.js.
+          </p>
+          <div className="mt-8 flex gap-4 justify-center lg:justify-start">
+            <button
+              onClick={() => navigate('/my-portfolio/projects')}
+              className="inline-flex items-center px-8 py-3 rounded-lg bg-[rgba(255,220,25,0.7)] text-black hover:bg-yellow-300 transition-all shadow-md hover:shadow-lg"
             >
-              <Github className="h-6 w-6 text-gray-400 group-hover:text-gray-50" />{' '}
-              {/* Added 'group-hover' class */}
-            </a>
-            <a
-              href="https://www.linkedin.com/in/someilam/"
-              className="p-3 rounded-full hover:bg-[rgba(255,220,25,0.4)] transition group"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <Linkedin className="h-6 w-6 text-gray-400 group-hover:text-gray-50" />{' '}
-              {/* Added 'group-hover' class */}
-            </a>
+              View Projects
+              <ExternalLink className="ml-2 h-5 w-5" />
+            </button>
+            <div className="flex gap-2">
+              <a
+                href="https://github.com/SomeiLam"
+                className="p-3 rounded-full hover:bg-[rgba(255,220,25,0.4)] hover:shadow-lg transition group"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <Github className="h-6 w-6 text-slate-600 group-hover:text-slate-700 group-hover:shadow-lg" />{' '}
+                {/* Added 'group-hover' class */}
+              </a>
+              <a
+                href="https://www.linkedin.com/in/someilam/"
+                className="p-3 rounded-full hover:bg-[rgba(255,220,25,0.4)] hover:shadow-lg transition group"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <Linkedin className="h-6 w-6 text-slate-600 group-hover:text-slate-700 group-hover:shadow-lg" />{' '}
+                {/* Added 'group-hover' class */}
+              </a>
+            </div>
           </div>
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 };
 
